@@ -1,6 +1,15 @@
-
+ 
 <app-instrument></app-instrument>
-<app-timer></app-timer>
+<!--app-timer></app-timer -->
+<app-navbar></app-navbar>
+<nav>
+  <ul>
+    <li><a routerLink="/app-timer" routerLinkActive="active" ariaCurrentWhenActive="page">Round Robin Timer</a></li>
+    <li><a routerLink="/app-prep-speech" routerLinkActive="active" ariaCurrentWhenActive="page">Prepared Speech Timer</a></li>
+  </ul>
+</nav>
+<!-- The routed views render in the <router-outlet>-->
+<router-outlet></router-outlet>
  
  
 

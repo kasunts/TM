@@ -7,19 +7,24 @@ import { InstrumentComponent } from './instrument/instrument.component';
 import { CdTimerModule } from 'angular-cd-timer';
 import { TimerComponent } from './timer/timer.component';
 import { PrepSpeechComponent } from './prep-speech/prep-speech.component';
-
+import { NavbarComponent } from './navbar/navbar.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     AppComponent,
     InstrumentComponent,
     TimerComponent,
-    PrepSpeechComponent
+    PrepSpeechComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CdTimerModule
+    CdTimerModule,
+    NoopAnimationsModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

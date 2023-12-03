@@ -1,7 +1,7 @@
-import  {Component, OnInit, ViewChild} from '@angular/core';
+import  {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CdTimerComponent, TimeInterface} from 'angular-cd-timer';
-import { interval } from 'rxjs';
-import { InstrumentComponent } from '../instrument/instrument.component';
+import { Subscription, interval } from 'rxjs';
+ 
 import * as Tone from 'tone';
 
 @Component({
@@ -9,31 +9,31 @@ import * as Tone from 'tone';
   templateUrl: './timer.component.html',
   styleUrl: './timer.component.css'
 })
-export class TimerComponent implements OnInit{
+export class TimerComponent implements OnInit,OnDestroy{
   @ViewChild('basicTimer', { static: true })
   basicTimer!: CdTimerComponent;
-
-
-  //@ViewChild('instrumentComponent', { static: true })
- // instrumentComponent!: InstrumentComponent;
 
   timerInfo = '';
   timervalue:number=0;
   bellSounded:boolean =false;
-  
+  timerSubscription: Subscription = new Subscription;  
 
   constructor() {
     this.timerInfo = '';
   }
 
+  ngOnDestroy(): void {
+    this.timerSubscription.unsubscribe();
+  }
+
   ngOnInit(): void {
     console.log('ngOnInit'+this.timerInfo);
         // Use RxJS interval to periodically check the timer value
-        const timerSubscription = interval(1000).subscribe(() => {
+        this.timerSubscription = interval(1000).subscribe(() => {
           // Assume fetchTimerValue is a method to get the timer value from the third-party component
           //this.timervalue = this.basicTimer.get().seconds;
           this.timervalue = this.basicTimer.get().tick_count ;
-          console.log('this.timervalue '+this.timervalue+"  -  " + this.basicTimer.get().tick_count );
+          console.log('this.timervalue round robin '+this.timervalue+"  -  " + this.basicTimer.get().tick_count );
           // Add logic to determine the background color based on the timerValue
           if (this.timervalue < 20) {
             document.body.style.backgroundColor= '#808080';  //grey
@@ -51,48 +51,12 @@ export class TimerComponent implements OnInit{
         // Don't forget to unsubscribe to prevent memory leaks when the component is destroyed
         // You might want to handle this in ngOnDestroy lifecycle hook
         // For simplicity, we'll just unsubscribe in 10 seconds
-       /* setTimeout(() => {
-          timerSubscription.unsubscribe();
-        }, 10000);*/
+        setTimeout(() => {
+          this.timerSubscription.unsubscribe();
+        }, 10000000); 
   }
 
-
-  ngOnInit1(): void {
-    console.log('ngOnInit'+this.timerInfo);
-        // Use RxJS interval to periodically check the timer value
-        const timerSubscription = interval(1000).subscribe(() => {
-          // Assume fetchTimerValue is a method to get the timer value from the third-party component
-          //this.timervalue = this.basicTimer.get().seconds;
-          this.timervalue = this.basicTimer.get().tick_count ;
-          console.log('this.timervalue '+this.timervalue+"  -  " + this.basicTimer.get().tick_count );
-          // Add logic to determine the background color based on the timerValue
-          if (this.timervalue < 10) {
-            document.body.style.backgroundColor= '#808080';  //grey
-          } else if (this.timervalue >= 10 && this.timervalue < 20) {
-
-            if(this.bellSounded==false){
-                this.playBell();
-                this.bellSounded=true;
-            }
-          
-            document.body.style.backgroundColor= '#008000';  //green
-          } else if (this.timervalue >= 20 && this.timervalue <  30) {
-            document.body.style.backgroundColor= '#FFBF00';  //amber
-          } else if (this.timervalue >= 30  ) {
-            document.body.style.backgroundColor= '#ff0000';  //red
-          
-          } //else {
-          //  document.body.style.backgroundColor = '#ffffff';  
-          //}
-        });
-    
-        // Don't forget to unsubscribe to prevent memory leaks when the component is destroyed
-        // You might want to handle this in ngOnDestroy lifecycle hook
-        // For simplicity, we'll just unsubscribe in 10 seconds
-       /* setTimeout(() => {
-          timerSubscription.unsubscribe();
-        }, 10000);*/
-  }
+ 
 
   onComplete(data: any) {
     this.timerInfo = 'Finished !';
@@ -115,8 +79,6 @@ export class TimerComponent implements OnInit{
 
   doActionBasicTimer(action: String) {
     console.log('doActionBasicTimer' +this.basicTimer.get().seconds);
-    //const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-   // document.body.style.backgroundColor = randomColor;
     switch (action) {
       case 'start':
         this.basicTimer.start();

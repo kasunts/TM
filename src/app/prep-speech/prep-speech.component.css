@@ -1,0 +1,11 @@
+.bootstrap-timer {
+    color: #303030;
+    background-color: hsla(0, 0%, 93%, 0.815);
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #c9c9c9;
+    border-radius: 8px;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 180.6px;
+  }

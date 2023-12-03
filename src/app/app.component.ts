@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'TM';
+
+  showComponentA: boolean = false;
+
+  toggleComponents(): void {
+    this.showComponentA = !this.showComponentA;
+  }
 }
